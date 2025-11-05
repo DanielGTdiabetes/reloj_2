@@ -86,6 +86,106 @@ const Zucchini = (props: React.SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
+const Lemon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" {...props}>
+        <ellipse cx="12" cy="12" rx="8" ry="10" fill="#f6e05e"/>
+        <path d="M12 2C8 2 5 5 5 9c0 4 3 7 7 7s7-3 7-7c0-4-3-7-7-7z" fill="#fbbf24"/>
+        <circle cx="9" cy="10" r="1" fill="#fef3c7"/>
+        <circle cx="15" cy="10" r="1" fill="#fef3c7"/>
+        <circle cx="12" cy="14" r="1.5" fill="#fef3c7"/>
+    </svg>
+);
+
+const Orange = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" {...props}>
+        <circle cx="12" cy="12" r="10" fill="#f97316"/>
+        <circle cx="12" cy="12" r="8" fill="#fb923c"/>
+        <circle cx="9" cy="9" r="1" fill="#fed7aa" opacity="0.6"/>
+        <circle cx="15" cy="9" r="1" fill="#fed7aa" opacity="0.6"/>
+        <circle cx="12" cy="15" r="1" fill="#fed7aa" opacity="0.6"/>
+        <path d="M12 2L10 6h4z" fill="#84cc16"/>
+    </svg>
+);
+
+const Fig = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" {...props}>
+        <ellipse cx="12" cy="14" rx="6" ry="8" fill="#7c3aed"/>
+        <path d="M12 2C10 2 8 4 8 6v2h8V6c0-2-2-4-4-4z" fill="#5b21b6"/>
+        <path d="M10 4h4v2h-4z" fill="#4c1d95"/>
+    </svg>
+);
+
+const Melon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" {...props}>
+        <ellipse cx="12" cy="12" rx="10" ry="8" fill="#84cc16"/>
+        <ellipse cx="12" cy="12" rx="8" ry="6" fill="#a3e635"/>
+        <path d="M2 12h20M12 4v16" stroke="#65a30d" strokeWidth="1" opacity="0.5"/>
+        <circle cx="8" cy="10" r="0.5" fill="#65a30d"/>
+        <circle cx="16" cy="10" r="0.5" fill="#65a30d"/>
+        <circle cx="12" cy="14" r="0.5" fill="#65a30d"/>
+    </svg>
+);
+
+const Grape = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" {...props}>
+        <circle cx="10" cy="8" r="3" fill="#9333ea"/>
+        <circle cx="14" cy="8" r="3" fill="#a855f7"/>
+        <circle cx="8" cy="12" r="3" fill="#9333ea"/>
+        <circle cx="12" cy="12" r="3" fill="#a855f7"/>
+        <circle cx="16" cy="12" r="3" fill="#9333ea"/>
+        <circle cx="10" cy="16" r="3" fill="#a855f7"/>
+        <circle cx="14" cy="16" r="3" fill="#9333ea"/>
+        <path d="M12 2L11 6h2z" fill="#84cc16"/>
+    </svg>
+);
+
+const Pomegranate = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" {...props}>
+        <circle cx="12" cy="12" r="9" fill="#dc2626"/>
+        <circle cx="12" cy="12" r="7" fill="#ef4444"/>
+        <path d="M12 3L10 7h4z" fill="#84cc16"/>
+        <circle cx="9" cy="10" r="1" fill="#991b1b"/>
+        <circle cx="15" cy="10" r="1" fill="#991b1b"/>
+        <circle cx="12" cy="14" r="1" fill="#991b1b"/>
+    </svg>
+);
+
+const Persimmon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" {...props}>
+        <ellipse cx="12" cy="14" rx="7" ry="9" fill="#ea580c"/>
+        <ellipse cx="12" cy="14" rx="5" ry="7" fill="#fb923c"/>
+        <path d="M12 2L10 6h4z" fill="#84cc16"/>
+        <circle cx="9" cy="12" r="0.8" fill="#c2410c"/>
+        <circle cx="15" cy="12" r="0.8" fill="#c2410c"/>
+    </svg>
+);
+
+const Peach = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" {...props}>
+        <ellipse cx="12" cy="13" rx="7" ry="9" fill="#fbbf24"/>
+        <ellipse cx="12" cy="13" rx="5" ry="7" fill="#fde047"/>
+        <path d="M12 2L10 5h4z" fill="#84cc16"/>
+        <ellipse cx="10" cy="12" rx="1.5" ry="2" fill="#f59e0b" opacity="0.6"/>
+    </svg>
+);
+
+const Plum = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" {...props}>
+        <ellipse cx="12" cy="13" rx="6" ry="8" fill="#7c3aed"/>
+        <ellipse cx="12" cy="13" rx="4" ry="6" fill="#9333ea"/>
+        <path d="M12 2L10 5h4z" fill="#84cc16"/>
+    </svg>
+);
+
+const Apricot = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" {...props}>
+        <ellipse cx="12" cy="13" rx="6" ry="8" fill="#f97316"/>
+        <ellipse cx="12" cy="13" rx="4" ry="6" fill="#fb923c"/>
+        <path d="M12 2L10 5h4z" fill="#84cc16"/>
+        <circle cx="10" cy="12" r="0.8" fill="#ea580c"/>
+    </svg>
+);
+
 const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
     'strawberry': Strawberry,
     'cherries': Cherries,
@@ -96,6 +196,16 @@ const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
     'lettuce': Lettuce,
     'tomato': Tomato,
     'zucchini': Zucchini,
+    'lemon': Lemon,
+    'orange': Orange,
+    'fig': Fig,
+    'melon': Melon,
+    'grape': Grape,
+    'pomegranate': Pomegranate,
+    'persimmon': Persimmon,
+    'peach': Peach,
+    'plum': Plum,
+    'apricot': Apricot,
 };
 
 interface ProduceIconProps extends React.SVGProps<SVGSVGElement> {
