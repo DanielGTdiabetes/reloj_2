@@ -1,0 +1,5 @@
+{
+  "name": "Pantalla Reloj Dashboard",
+  "description": "A non-interactive, autonomous information display system combining meteorological, maritime, astronomical, news, and personal data on a cinematic, fluid widescreen display.",
+  "requestFramePermissions": []
+}

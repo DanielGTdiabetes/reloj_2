@@ -1,0 +1,13 @@
+
+fastapi
+uvicorn
+pydantic>=2
+pytz
+astral
+websockets
+aiofiles
+aiohttp
+feedparser
+paho-mqtt
+jinja2
+python-dotenv

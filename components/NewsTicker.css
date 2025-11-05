@@ -1,0 +1,22 @@
+.ticker-wrap {
+    width: 100%;
+    overflow: hidden;
+}
+.ticker-move {
+    display: inline-block;
+    white-space: nowrap;
+    animation: ticker 60s linear infinite;
+}
+.ticker-item {
+    display: inline-block;
+    padding-right: 2rem;
+    color: #e5e7eb; /* text-gray-200 */
+}
+@keyframes ticker {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-50%, 0, 0);
+    }
+}
