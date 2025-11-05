@@ -99,7 +99,7 @@ export const WifiCard: React.FC = () => {
                                 </button>
                             </div>
                             {selectedSsid === net.ssid && (
-                                <form onSubmit={handleConnect} className="p-3 bg-gray-750 rounded-b-md">
+                                <form onSubmit={handleConnect} className="p-3 bg-gray-700 rounded-b-md">
                                     <input
                                         type="password"
                                         value={password}

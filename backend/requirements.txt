@@ -10,3 +10,4 @@ feedparser
 paho-mqtt
 jinja2
 python-dotenv
+psutil

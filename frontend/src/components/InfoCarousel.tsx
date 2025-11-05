@@ -4,6 +4,7 @@ import { fetchAstronomyData, fetchCalendarEvents, fetchEphemerides, fetchNews, f
 import type { AstronomyData, CalendarEvent, EphemeridesData, NewsItem, SeasonalData, SeasonalDataItem, SantoralData } from '../types';
 import { MoonIcon } from './MoonIcon';
 import { ProduceIcon } from './ProduceIcon';
+import './InfoCarousel.css';
 
 type CarouselItem = {
     id: 'astro' | 'calendar' | 'ephemerides' | 'news' | 'seasonal' | 'santoral';
@@ -49,7 +50,14 @@ const ScrollableContent: React.FC<{ children: React.ReactNode }> = ({ children }
     return (
         <div ref={containerRef} className={`w-full h-full relative overflow-hidden ${isScrolling ? 'autoscroll-container' : ''}`}>
             <div ref={contentRef} className={isScrolling ? 'autoscroll-content' : ''}>
-                 {children}
+                {isScrolling ? (
+                    <>
+                        {children}
+                        <div className="mt-4">{children}</div>
+                    </>
+                ) : (
+                    children
+                )}
             </div>
         </div>
     );

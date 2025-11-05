@@ -1,0 +1,25 @@
+/* Auto-scroll animation for carousel content */
+.autoscroll-container {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.autoscroll-content {
+    animation: autoscroll 30s linear infinite;
+    will-change: transform;
+}
+
+.autoscroll-content:hover {
+    animation-play-state: paused;
+}
+
+@keyframes autoscroll {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-50%);
+    }
+}
+
