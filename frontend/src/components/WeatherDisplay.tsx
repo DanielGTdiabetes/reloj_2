@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { WeatherData } from '../types';
 import { Wind, Cloud, Compass } from 'lucide-react';
@@ -42,7 +41,7 @@ export const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ data, units }) =
                 </div>
             </div>
             <div className="mt-4 flex justify-between text-center">
-                {data.forecast.slice(0, 4).map(f => (
+                {data.forecast.slice(0, 3).map(f => (
                     <div key={f.time} className="flex-1">
                         <p className="text-sm text-gray-400">{f.time}</p>
                         <p className="font-semibold text-lg mt-1">{Math.round(f.temperature)}{tempUnit}</p>

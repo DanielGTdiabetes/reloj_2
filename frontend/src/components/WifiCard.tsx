@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { scanWifi, connectWifi } from '../services/api';
 import { Wifi, WifiOff, Loader2 } from 'lucide-react';

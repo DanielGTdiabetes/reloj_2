@@ -1,4 +1,3 @@
-
 export interface SystemConfig {
     timezone: string;
 }
@@ -52,9 +51,9 @@ export interface EphemeridesConfig {
 }
 
 export interface CalendarConfig {
-    api_key: string;
-    calendar_id: string;
+    ics_filename?: string;
 }
+
 
 export interface StormConfig {
     enabled: boolean;
@@ -145,6 +144,14 @@ export interface WeatherData {
     icon: string;
     description: string;
     forecast: { time: string; temperature: number }[];
+}
+
+export interface AemetRadarFrame {
+    url: string;
+    timestamp: number;
+}
+export interface AemetRadarData {
+    frames: AemetRadarFrame[];
 }
 
 export interface StormStrike {

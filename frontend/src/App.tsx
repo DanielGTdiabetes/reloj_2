@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, createContext, useCallback } from 'react';
 import { HashRouter, Routes, Route, Link } from 'react-router-dom';
 import { Kiosk } from './pages/Kiosk';
@@ -16,6 +15,7 @@ const App: React.FC = () => {
     const [lastChecksum, setLastChecksum] = useState<string | null>(null);
 
     const loadConfig = useCallback(async () => {
+        setLoading(true);
         try {
             const fetchedConfig = await fetchConfig();
             setConfig(fetchedConfig);

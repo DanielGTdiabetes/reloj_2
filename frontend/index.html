@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -16,7 +15,7 @@
         background-color: #000;
         color: #fff;
         font-family: 'Inter', sans-serif;
-        overflow: hidden;
+        overflow: hidden; /* Prevent scrollbars */
       }
       .maplibregl-ctrl, .maplibregl-control-container {
         display: none !important;
@@ -24,6 +23,7 @@
       /* Allow popups, but not controls */
       .maplibregl-popup {
         display: block !important;
+        max-width: none !important; /* Allow custom popup width */
       }
     </style>
   <script type="importmap">

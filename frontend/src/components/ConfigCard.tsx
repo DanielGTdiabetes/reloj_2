@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { updateConfigGroup, testConfigGroup } from '../services/api';
 import type { AppConfig } from '../types';
@@ -22,53 +21,37 @@ export const ConfigCard: React.FC<ConfigCardProps> = ({ groupName, initialData, 
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type } = e.target;
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, path: string) => {
+        const { value, type } = e.target;
         
         const isCheckbox = type === 'checkbox';
-        const isNumber = type === 'number';
+        const isNumber = e.target.getAttribute('data-type') === 'number' || type === 'number';
 
-        const finalValue = isCheckbox ? (e.target as HTMLInputElement).checked : (isNumber ? Number(value) : value);
+        let finalValue: any = value;
+        if (isCheckbox) {
+            finalValue = (e.target as HTMLInputElement).checked;
+        } else if (isNumber) {
+            finalValue = Number(value);
+        } else if (e.target.getAttribute('data-type') === 'array-number') {
+            finalValue = value.split(',').map(s => Number(s.trim())).filter(n => !isNaN(n));
+        } else if (e.target.getAttribute('data-type') === 'array-string') {
+             finalValue = value.split(',').map(s => s.trim());
+        }
 
-        const keys = name.split('.');
+        const keys = path.split('.');
         
         setData((prev: any) => {
-            const newState = JSON.parse(JSON.stringify(prev)); // Deep copy to avoid mutation
+            const newState = JSON.parse(JSON.stringify(prev));
             let current = newState;
-            
             for (let i = 0; i < keys.length - 1; i++) {
+                if (!current[keys[i]]) current[keys[i]] = {};
                 current = current[keys[i]];
             }
             current[keys[keys.length - 1]] = finalValue;
-            
             return newState;
         });
     };
     
-    const handleAddItem = (key: string) => {
-        setData((prev: any) => {
-            const currentArray = prev[key] || [];
-            // Create a new item with empty strings for keys based on the first item's structure
-            const newItem = currentArray.length > 0 
-                ? Object.fromEntries(Object.keys(currentArray[0]).map(k => [k, '']))
-                : { name: '', url: ''}; // Fallback for news sources
-            return {
-                ...prev,
-                [key]: [...currentArray, newItem]
-            };
-        });
-    };
-    
-    const handleRemoveItem = (key: string, index: number) => {
-         setData((prev: any) => {
-            const currentArray = prev[key] || [];
-            return {
-                ...prev,
-                [key]: currentArray.filter((_: any, i: number) => i !== index)
-            };
-        });
-    };
-
     const handleSave = async () => {
         setLoading(true);
         setMessage(null);
@@ -99,75 +82,67 @@ export const ConfigCard: React.FC<ConfigCardProps> = ({ groupName, initialData, 
     };
 
     const renderField = (key: string, value: any, prefix = '') => {
-        const name = prefix ? `${prefix}.${key}` : key;
-        const id = `config-${groupName}-${name}`;
+        const path = prefix ? `${prefix}.${key}` : key;
+        const id = `config-${groupName}-${path}`;
         
         if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
             return (
-                <div key={name} className="pl-4 border-l-2 border-gray-700 mt-2">
-                    <label className="block text-sm font-medium text-gray-400 capitalize mb-1">{key}</label>
-                    {Object.entries(value).map(([subKey, subValue]) => renderField(subKey, subValue, name))}
+                <div key={path} className="pl-3 border-l-2 border-gray-700 mt-3 pt-2">
+                    <label className="block text-sm font-medium text-gray-400 capitalize mb-1">{key.replace(/_/g, ' ')}</label>
+                    {Object.entries(value).map(([subKey, subValue]) => renderField(subKey, subValue, path))}
                 </div>
             );
         }
         
-        if (Array.isArray(value) && typeof value[0] === 'object' ) { // Render UI for array of objects (like news sources)
-             return (
-                 <div key={name} className="mt-4">
-                     <label className="block text-lg font-medium text-gray-300 capitalize mb-2">{key.replace(/_/g, ' ')}</label>
-                     {value.map((item, index) => (
-                         <div key={index} className="p-3 border border-gray-700 rounded-md mb-3 relative">
-                            <button onClick={() => handleRemoveItem(key, index)} className="absolute top-2 right-2 text-gray-400 hover:text-red-400">
-                                <X size={16}/>
-                            </button>
-                             {Object.entries(item).map(([itemKey, itemValue]) =>
-                                 renderField(itemKey, itemValue, `${name}.${index}`)
-                             )}
-                         </div>
-                     ))}
-                     <button onClick={() => handleAddItem(key)} className="flex items-center text-sm text-indigo-400 hover:text-indigo-300">
-                         <Plus size={16} className="mr-1" /> {key === 'sources' ? 'Añadir fuente' : `Añadir ${key.slice(0,-1)}`}
-                     </button>
+        const isArrayOfObjects = Array.isArray(value) && value.length > 0 && typeof value[0] === 'object';
+
+        if (isArrayOfObjects) {
+            // This is handled by a special case in the main render loop if needed, e.g., for news sources.
+            // For now, we render it as a JSON string to allow editing.
+            return (
+                 <div key={path} className="mb-4">
+                    <label htmlFor={id} className="block text-sm font-medium text-gray-300 capitalize">{key.replace(/_/g, ' ')}</label>
+                    <textarea
+                        id={id}
+                        value={JSON.stringify(value, null, 2)}
+                        onChange={(e) => {
+                            try {
+                                const parsed = JSON.parse(e.target.value);
+                                handleChange({ target: { value: parsed, type: 'textarea' } } as any, path);
+                            } catch (err) {/* Ignore JSON parse errors while typing */}
+                        }}
+                        className="mt-1 block w-full rounded-md border-gray-600 bg-gray-800 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-white px-3 py-2 font-mono h-32"
+                    />
                  </div>
-             );
+            )
         }
+        
+        const isArrayOfNumbers = Array.isArray(value) && (value.length === 0 || typeof value[0] === 'number');
+        const isArrayOfStrings = Array.isArray(value) && (value.length === 0 || typeof value[0] === 'string');
 
         let inputType = 'text';
-        if (typeof value === 'number') inputType = 'number';
-        if (typeof value === 'boolean') inputType = 'checkbox';
-        if (Array.isArray(value)) inputType = 'text'; // Render arrays of primitives (like bbox) as comma-separated text
+        let dataType = 'string';
+        if (typeof value === 'number') { inputType = 'number'; dataType = 'number';}
+        if (typeof value === 'boolean') { inputType = 'checkbox'; dataType = 'boolean';}
+        if (isArrayOfNumbers) { inputType = 'text'; dataType = 'array-number';}
+        if (isArrayOfStrings) { inputType = 'text'; dataType = 'array-string';}
         
         const isSelect = knownSelectOptions[key];
 
         return (
-            <div key={name} className="mb-4">
+            <div key={path} className="mb-4">
                 <label htmlFor={id} className="block text-sm font-medium text-gray-300 capitalize">{key.replace(/_/g, ' ')}</label>
                 {inputType === 'checkbox' ? (
-                     <input
-                        id={id}
-                        name={name}
-                        type="checkbox"
-                        checked={Boolean(value)}
-                        onChange={handleChange}
-                        className="mt-1 h-4 w-4 rounded border-gray-600 bg-gray-800 text-indigo-600 focus:ring-indigo-500"
-                    />
+                     <input id={id} type="checkbox" checked={Boolean(value)} onChange={(e) => handleChange(e, path)} className="mt-1 h-4 w-4 rounded border-gray-600 bg-gray-800 text-indigo-600 focus:ring-indigo-500" />
                 ) : isSelect ? (
-                     <select
-                        id={id}
-                        name={name}
-                        value={String(value)}
-                        onChange={handleChange}
-                         className="mt-1 block w-full rounded-md border-gray-600 bg-gray-800 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-white px-3 py-2"
-                     >
+                     <select id={id} value={String(value)} onChange={(e) => handleChange(e, path)} className="mt-1 block w-full rounded-md border-gray-600 bg-gray-800 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-white px-3 py-2">
                         {isSelect.map(option => <option key={option} value={option}>{option}</option>)}
                      </select>
                 ) : (
                     <input
-                        id={id}
-                        name={name}
-                        type={inputType}
-                        value={Array.isArray(value) ? value.join(', ') : String(value)}
-                        onChange={handleChange}
+                        id={id} type={inputType} value={Array.isArray(value) ? value.join(', ') : String(value)}
+                        onChange={(e) => handleChange(e, path)}
+                        data-type={dataType}
                         className="mt-1 block w-full rounded-md border-gray-600 bg-gray-800 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-white px-3 py-2"
                         step={inputType === 'number' && (String(value).includes('.') ? '0.1' : '1')}
                     />
@@ -188,18 +163,10 @@ export const ConfigCard: React.FC<ConfigCardProps> = ({ groupName, initialData, 
                 </div>
             )}
             <div className="mt-4 flex space-x-2">
-                <button
-                    onClick={handleSave}
-                    disabled={loading}
-                    className="flex-1 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-                >
+                <button onClick={handleSave} disabled={loading} className="flex-1 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
                     {loading ? 'Guardando...' : 'Guardar'}
                 </button>
-                <button
-                    onClick={handleTest}
-                    disabled={loading}
-                    className="flex-1 inline-flex justify-center py-2 px-4 border border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-300 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50"
-                >
+                <button onClick={handleTest} disabled={loading} className="flex-1 inline-flex justify-center py-2 px-4 border border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-300 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50">
                     {loading ? 'Probando...' : 'Probar'}
                 </button>
             </div>

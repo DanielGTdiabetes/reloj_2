@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 // SVG components for different weather conditions

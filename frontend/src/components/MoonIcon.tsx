@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 // Source: https://www.figma.com/community/file/1108993324681326758 (MIT License)

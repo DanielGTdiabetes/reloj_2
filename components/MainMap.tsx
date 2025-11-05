@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import type { Map as MapInstance, GeoJSONSource } from 'maplibre-gl';
@@ -23,6 +22,7 @@ export const MainMap: React.FC<MainMapProps> = ({ config, shipData, flightData, 
         const initializeMap = () => {
              try {
                 const { map: mapConfig, storm: stormConfig } = config;
+                // FIX: Removed invalid 'workerCount' property from map options as it's not a valid MapOption.
                 const mapInstance = new maplibregl.Map({
                     container: mapContainer.current!,
                     style: mapConfig.style,
@@ -33,7 +33,6 @@ export const MainMap: React.FC<MainMapProps> = ({ config, shipData, flightData, 
                     interactive: false,
                     collectResourceTiming: false,
                     attributionControl: false,
-                    workerCount: 0,
                 });
 
                 map.current = mapInstance;

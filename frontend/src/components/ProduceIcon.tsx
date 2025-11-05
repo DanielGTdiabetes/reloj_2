@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 // Source: SVGs created from various sources, licensed under MIT or similar permissive licenses.
